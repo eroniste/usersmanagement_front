@@ -5,9 +5,10 @@ import { SWRConfig } from "swr";
 import Head from "next/head";
 import axios from "axios";
 import { Toaster } from "@/components/ui/toaster"
+import { MantineProvider } from '@mantine/core';
 
 
-axios.defaults.baseURL = "https://serverexpress-hosting.vercel.app/";
+axios.defaults.baseURL = "http://localhost:8080/";
 
 export default function App({ Component, pageProps }: AppProps) {
   <Head>
@@ -18,11 +19,13 @@ export default function App({ Component, pageProps }: AppProps) {
     />
   </Head>;
   return (
+    <MantineProvider>
     <SWRConfig
       value={{ fetcher: (url: string) => axios(url).then((r) => r.data) }}
     >
       <Component {...pageProps} />
       <Toaster />
     </SWRConfig>
+    </MantineProvider>
   );
 }
