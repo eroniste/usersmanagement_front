@@ -172,7 +172,7 @@ export default function Home({ usersFromServer }: any) {
                         </td>
                         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                           <div className="flex flex-col">
-                            <button className="px-6 py-2 text-white bg-indigo-600 rounded-full" type="button" onClick={() => Router.push('/addUser')}>Update</button>
+                            <button className="px-6 py-2 text-white bg-indigo-600 rounded-full" type="button" onClick={() => Router.push(`/UpdateUser?userId=${invoice._id}`)}>Update</button>
                             <br />
                             <button className="px-6 py-2 text-white bg-green-600 rounded-full" type="button" onClick={() => deleteUser(invoice._id)}>delete</button>
                           </div>

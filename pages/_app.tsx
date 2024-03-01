@@ -8,6 +8,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { MantineProvider } from "@mantine/core";
 import { NextComponentType } from "next";
 import { NextPageContext } from "next";
+import { ToastContainer } from "react-toastify";
+
 
 interface PageWithLayout {
   getLayout?: (page: React.ReactNode) => React.ReactNode;
@@ -31,7 +33,7 @@ export default function MyApp({ Component, pageProps }) {
         {getLayout(<Component {...pageProps} />)}
       </MantineProvider>
 
-      <Toaster />
+      <ToastContainer />
     </>
   );
 }
