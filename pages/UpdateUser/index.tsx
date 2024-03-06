@@ -15,11 +15,11 @@ interface UserData {
   username: string;
   // Add more properties as needed
 }
-const fetcher = (url: string) => httpClientreq(url).then((r) => r.data);
 function UpdateUser() {
   const router = useRouter();
   const userId = router.query.userId;
-
+  
+  const fetcher = (url: string) => httpClientreq(url).then((r) => r.data);
   const { data, isLoading, error } = useSWR<UserData>(
     `/users/${userId}`,
     fetcher

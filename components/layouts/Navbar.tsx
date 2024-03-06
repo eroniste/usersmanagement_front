@@ -3,35 +3,51 @@ import { FaUsersGear } from "react-icons/fa6";
 import { cn } from "@/lib/utils";
 import React from "react";
 import Router, { useRouter } from "next/router";
+import httpClientreq from "@/lib/httpClientreq";
+import useSWR from "swr";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
 
 
 
 
 const Navbar: React.FC<any> = ({  }) => {
   const router = useRouter();
+  const [loggedIn, setLoggedIn] = useState<boolean>(false);
+  const [loggOut, setLoggOut] = useState<boolean>(true);
+
+  const fetcher = (url: string) => httpClientreq(url).then((r) => r.data);
+  const { data, isLoading, error } = useSWR(
+    `/currentUser`,
+    fetcher
+  );
   
-  function useAuth() {
-    const [loggedIn, setLoggedIn] = useState<boolean>(false);
-  
-    useEffect(() => {
-      // Check if token exists in localStorage
-      const token = localStorage.getItem('access_token');
-      if (token) {
-        setLoggedIn(true);
-      } else {
-        setLoggedIn(false);
-      }
-    }, [loggedIn]);
-  
-    return loggedIn;
-  }
+  useEffect(() => {
+    // Check if token exists in localStorage
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      setLoggedIn(true);
+    } else {
+      setLoggedIn(false);
+    }
+  }, [loggOut]); 
+
   const handleSignout = () => {
+    localStorage.removeItem('access_token');
+    setLoggOut(!loggOut)
+    router.push('/');
     
     
   };
   
   
-  const isLoggedIn = useAuth();
   return (
     <nav className={`bg-white shadow-md border-gray-200 w-full z-20 realtiv  flex`}>
       <div className="flex items-center justify-between p-4 w-full">
@@ -42,10 +58,24 @@ const Navbar: React.FC<any> = ({  }) => {
           </h1>
         </a>
         <div> 
-          {isLoggedIn ? (
-            <button className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:opacity-80 text-white text-sm font-medium rounded-md" onClick={handleSignout}>
-              Sign Out
-            </button>
+          {loggedIn ? (
+            <div className="flex flex-row">
+              <DropdownMenu>
+  <DropdownMenuTrigger>{data && <img src={data.image} className="w-12 h-12 mx-2 overflow-hidden rounded-full"/>}</DropdownMenuTrigger>
+  <DropdownMenuContent>
+    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+    <DropdownMenuSeparator />
+    <DropdownMenuItem><button onClick={() => router.push('/Userspage')}>My users</button></DropdownMenuItem>
+    
+    <DropdownMenuItem><button onClick={handleSignout}>Signout</button></DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>
+
+            
+            
+<span> username </span>
+
+            </div>
           ) : (
             <>
               <button className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:opacity-80 text-white text-sm font-medium rounded-md m-2" onClick={() => router.push('/SignupPage')}>

@@ -9,7 +9,7 @@ import Navbar from "@/components/layouts/Navbar";
 import httpClientreq from "@/lib/httpClientreq";
 
 function LoginPage() {
-  const [username, setUsername] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   let fetcher = (url: string) => httpClientreq(url).then((r) => r.data);
@@ -24,8 +24,10 @@ function LoginPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ email, password }),
+        
       });
+      console.log("kiljk",response)
       
 
       if (response.ok) {
@@ -34,7 +36,7 @@ function LoginPage() {
         console.log(data);
         if (accessToken) {
           localStorage.setItem("access_token", accessToken); // Store the access token in local storage
-          fetcher = (url: string) => httpClientreq(url).then((r) => r.data);
+          
           setLoggedIn(true);
           window.location.href="/";
         } else {
@@ -50,7 +52,7 @@ function LoginPage() {
 
   
 
-  if (error) return <div>Error loading user data</div>;
+  
   if (!data && loggedIn) return <div>Loading user data...</div>;
   console.log(data, "hoy");
 
@@ -73,8 +75,8 @@ function LoginPage() {
               placeholder="Your username"
               name="username"
               id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className="flex flex-col space-y-2">
